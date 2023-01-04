@@ -1,0 +1,11 @@
+name: KDR2
+version: 1.0.0
+author: Aboshxm2
+api: 4.0.0
+main: Aboshxm2\KDR2\Main
+
+softdepend: ScoreHud
+
+permissions:
+  KDR2.commands.kdrstats:
+    default: true

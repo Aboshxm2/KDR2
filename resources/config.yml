@@ -1,0 +1,34 @@
+# DO NOT CHANGE THIS
+config-version: 1
+
+cache:
+  # Enable data caching
+  enable: true
+  # Cache techniques:
+  # There are 3 cache techniques:
+  # player: The player data will be cached when the player joins the server and it will uncached when he leaves.
+  # ttl:  The data will be cached for some time when it gets requestd.
+  # mixed: Same as the player technique but if the player is offline we will switch to the ttl technique.
+  technique: player
+  # Expiration time in seconds used in the ttl technique.
+  ttl: 8
+
+database:
+  # The database type. "sqlite" and "mysql" are supported.
+  type: sqlite
+
+  # Edit these settings only if you choose "sqlite".
+  sqlite:
+    # The file name of the database in the plugin data folder.
+    # You can also put an absolute path here.
+    file: data.sqlite
+  # Edit these settings only if you choose "mysql".
+  mysql:
+    host: 127.0.0.1
+    # Avoid using the "root" user for security reasons.
+    username: root
+    password: ""
+    schema: your_schema
+  # The maximum number of simultaneous SQL queries
+  # Recommended: 1 for sqlite, 2 for MySQL. You may want to further increase this value if your MySQL connection is very slow.
+  worker-limit: 1
