@@ -36,7 +36,7 @@ class EventListener implements Listener
             $ev = new PlayerDeathsUpdateEvent($player, $deaths + 1);
             $ev->call();
 
-            $ev2 = new PlayerKillstreakUpdateEvent($player, $killstreak);
+            $ev2 = new PlayerKillstreakUpdateEvent($player, 0);
             $ev2->call();
 
             if (!$ev->isCancelled() and !$ev2->isCancelled()) {
