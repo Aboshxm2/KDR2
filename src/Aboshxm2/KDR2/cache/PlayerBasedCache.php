@@ -33,7 +33,7 @@ class PlayerBasedCache implements Cache
 
     public function get(string $playerName): ?array
     {
-        return $this->storage ?? null;
+        return $this->storage[$playerName] ?? null;
     }
 
     public function set(string $playerName, array $data): void

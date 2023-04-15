@@ -31,6 +31,6 @@ class ExpiringCache implements Cache
             return null;
         }
 
-        return $this->storage;
+        return $this->storage[$playerName];
     }
 }

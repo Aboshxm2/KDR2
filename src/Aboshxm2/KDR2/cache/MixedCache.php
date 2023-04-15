@@ -46,6 +46,6 @@ class MixedCache extends PlayerBasedCache implements Cache
             return null;
         }
 
-        return $this->storage;
+        return $this->storage[$playerName];
     }
 }
