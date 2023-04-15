@@ -40,8 +40,8 @@ class MixedCache extends PlayerBasedCache implements Cache
         }
 
         if(!isset($this->expiration[$playerName])) {
-            return null;
-        }// should not happen
+            return null;// should not happen
+        }
 
         if($this->expiration[$playerName] < time()) {
             unset($this->storage[$playerName]);

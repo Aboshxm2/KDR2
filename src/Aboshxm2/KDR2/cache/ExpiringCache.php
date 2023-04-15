@@ -26,8 +26,8 @@ class ExpiringCache implements Cache
             return null;
         }
         if(!isset($this->expiration[$playerName])) {
-            return null;
-        }// should not happen
+            return null;// should not happen
+        }
 
         if($this->expiration[$playerName] < time()) {
             unset($this->storage[$playerName]);
