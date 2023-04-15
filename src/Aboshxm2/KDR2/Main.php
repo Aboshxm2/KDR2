@@ -9,6 +9,7 @@ use Aboshxm2\KDR2\cache\CacheManager;
 use Aboshxm2\KDR2\cache\ExpiringCache;
 use Aboshxm2\KDR2\cache\MixedCache;
 use Aboshxm2\KDR2\cache\PlayerBasedCache;
+use Aboshxm2\KDR2\commands\KDRCommand;
 use Aboshxm2\KDR2\commands\KDRStatsCommand;
 use Aboshxm2\KDR2\database\Database;
 use Aboshxm2\KDR2\database\SqlDatabase;
@@ -20,6 +21,8 @@ use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\player\Player;
 use pocketmine\plugin\DisablePluginException;
 use pocketmine\plugin\PluginBase;
+use pocketmine\utils\Config;
+use Symfony\Component\Filesystem\Path;
 
 class Main extends PluginBase
 {
@@ -28,9 +31,13 @@ class Main extends PluginBase
     private Database $database;
     private Cache $cache;
     private bool $isCacheEnabled;
+    private Config $messages;
 
     protected function onEnable(): void
     {
+        $this->saveResource("messages.yml");
+        $this->messages = new Config(Path::join($this->getDataFolder(), "messages.yml"), Config::YAML);
+
         UpdateNotifier::checkUpdate($this->getName(), $this->getDescription()->getVersion());
         ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION);
 
@@ -48,7 +55,7 @@ class Main extends PluginBase
         Api::init($this);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
-        $this->getServer()->getCommandMap()->register("KDR2", new KDRStatsCommand($this));
+        $this->getServer()->getCommandMap()->register("KDR2", new KDRCommand($this));
     }
 
     /**
@@ -102,5 +109,10 @@ class Main extends PluginBase
                 $ev->call();
             });
         }
+    }
+
+    public function getMessage(string $key): string
+    {
+        return $this->messages->getNested($key) ?? $key;
     }
 }

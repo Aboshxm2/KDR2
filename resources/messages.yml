@@ -1,0 +1,23 @@
+help:
+  help: "§e/kdr help - Shows all plugin commands"
+  stats: "§e/kdr stats <player> - Shows player's stats"
+  set-kills: "§e/kdr set-kills <player> <kills> - Sets player's kills"
+  set-deaths: "§e/kdr set-deaths <player> <deaths> - Sets player's deaths"
+  set-killstreak: "§e/kdr set-killstreak <player> <killstreak> - Sets player's killstreak"
+stats:
+  usage: "§cUsage: /kdr stats <player>"
+  message: "{player}'s Stats: \nkills: {kills}\ndeaths: {deaths}\nkdr: {kdr}\nkillstreak: {killstreak}"
+set-kills:
+  usage: "§cUsage: /kdr set-kills <player> <kills>"
+  not-valid: "§cKills Argument is invalid."
+  message: "§a{player}'s kills updated successfully."
+set-deaths:
+  usage: "§cUsage: /kdr set-deaths <player> <deaths>"
+  not-valid: "§cDeaths Argument is invalid."
+  message: "§a{player}'s deaths updated successfully."
+set-killstreak:
+  usage: "§cUsage: /kdr set-killstreak <player> <killstreak>"
+  not-valid: "§cKillstreak Argument is invalid."
+  message: "§a{player}'s killstreak updated successfully."
+general:
+  no-permission: "§cYou don't have permission to use this command."
