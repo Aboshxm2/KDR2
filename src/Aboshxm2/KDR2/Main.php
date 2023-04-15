@@ -43,12 +43,20 @@ class Main extends PluginBase
         if ($this->getConfig()->getNested("cache.enable")) {
             $this->isCacheEnabled = true;
 
-            $this->cache = match (strtolower($this->getConfig()->getNested("cache.technique"))) {
-                Cache::TTL_CACHE_TECHNIQUE => new ExpiringCache($this->getConfig()->getNested("cache.ttl")),
-                Cache::PLAYER_CACHE_TECHNIQUE => new PlayerBasedCache($this),
-                Cache::MIXED_CACHE_TECHNIQUE => new MixedCache($this, $this->getConfig()->getNested("cache.ttl")),
-                default => throw new DisablePluginException("Unknown cache technique {$this->getConfig()->getNested("cache.technique")}"),
-            };
+            switch (strtolower($this->getConfig()->getNested("cache.technique"))) {
+                case Cache::TTL_CACHE_TECHNIQUE:
+                    $this->cache = new ExpiringCache($this->getConfig()->getNested("cache.ttl"));
+                    break;
+                case Cache::PLAYER_CACHE_TECHNIQUE:
+                    $this->cache = new PlayerBasedCache($this->getConfig()->getNested("cache.ttl"));
+                    break;
+                case Cache::MIXED_CACHE_TECHNIQUE:
+                    $this->cache = new MixedCache($this, $this->getConfig()->getNested("cache.ttl"));
+                    break;
+                default:
+                    $this->getLogger()->warning("Unknown cache technique {$this->getConfig()->getNested("cache.technique")}");
+                    throw new DisablePluginException();
+            }
         }
         Api::init($this);
 
