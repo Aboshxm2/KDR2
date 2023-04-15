@@ -9,9 +9,13 @@ Simple Kill Death Ratio plugin for Pocketmine-MP Servers.
 * Developer API
 
 ## Commands
-Command | Description | Permission
---- | --- | ---
-`/kdrstats` | Shows the player's stats. | `KDR2.commands.kdrstats`
+| Command               |        Description        |       Permission        |
+|:----------------------|:-------------------------:|:-----------------------:|
+| `/kdr help`           | Shows all plugin commands |            -            |
+| `/kdr stats`          |   Shows player's stats    | KDR2.commands.kdr.stats |
+| `/kdr set-kils`       |    Sets player's kills    | KDR2.commands.kdr.edit  |
+| `/kdr set-deaths`     |   Sets player's deaths    | KDR2.commands.kdr.edit  |
+| `/kdr set-killstreak` | Sets player's killstreak  | KDR2.commands.kdr.edit  |
 
 ## ScoreHud Tags
 * Kills - `KDR2.kills`
