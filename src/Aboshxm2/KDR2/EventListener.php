@@ -24,7 +24,8 @@ class EventListener implements Listener
 
     public function __construct(
         private Main $plugin
-    ) {}
+    ) {
+    }
 
     /**
      * @priority MONITOR
@@ -42,9 +43,9 @@ class EventListener implements Listener
 
             if (!$ev->isCancelled() and !$ev2->isCancelled()) {
                 Api::setAll($player->getName(), $kills, $ev->getDeaths(), $ev2->getKillstreak());
-            }else if(!$ev->isCancelled()) {
+            } elseif(!$ev->isCancelled()) {
                 Api::setAll($player->getName(), $kills, $ev->getDeaths(), $killstreak);
-            }else if(!$ev2->isCancelled()) {
+            } elseif(!$ev2->isCancelled()) {
                 Api::setAll($player->getName(), $kills, $deaths, $ev2->getKillstreak());
             }
         });
@@ -62,9 +63,9 @@ class EventListener implements Listener
 
                     if (!$ev->isCancelled() and !$ev2->isCancelled()) {
                         Api::setAll($attacker->getName(), $ev->getKills(), $deaths, $ev2->getKillstreak());
-                    }else if(!$ev->isCancelled()) {
+                    } elseif(!$ev->isCancelled()) {
                         Api::setAll($attacker->getName(), $ev->getKills(), $deaths, $killstreak);
-                    }else if(!$ev2->isCancelled()) {
+                    } elseif(!$ev2->isCancelled()) {
                         Api::setAll($attacker->getName(), $kills, $deaths, $ev2->getKillstreak());
                     }
                 });
@@ -140,7 +141,9 @@ class EventListener implements Listener
      */
     public function onLogin(PlayerLoginEvent $event): void
     {
-        if(!$this->plugin->isCacheEnabled()) return;
+        if(!$this->plugin->isCacheEnabled()) {
+            return;
+        }
 
         $player = $event->getPlayer();
 

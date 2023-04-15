@@ -30,7 +30,7 @@ class KDRCommand extends Command implements PluginOwned
                 ($sender->hasPermission("KDR2.commands.kdr.stats") ?
                     (
                         $this->plugin->getMessage("help.stats") . "\n"
-                    ): "") .
+                    ) : "") .
 
                 ($sender->hasPermission("KDR2.commands.kdr.edit") ?
                     (
@@ -90,7 +90,7 @@ class KDRCommand extends Command implements PluginOwned
                 Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newKills, $args, $sender): void {
                     Api::setAll($args[1], $newKills, $deaths, $killstreak);
                 });
-            break;
+                break;
             case "setdeaths":
             case "set-deaths":
                 if(!$sender->hasPermission("KDR2.commands.kdr.edit")) {

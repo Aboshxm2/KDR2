@@ -14,7 +14,7 @@ class MixedCache extends PlayerBasedCache implements Cache
     public function __construct(
         Main $plugin,
         protected int $ttl
-    ){
+    ) {
         parent::__construct($plugin);
     }
 
@@ -31,13 +31,17 @@ class MixedCache extends PlayerBasedCache implements Cache
 
     public function get(string $playerName): ?array
     {
-        if(!isset($this->storage[$playerName])) return null;
+        if(!isset($this->storage[$playerName])) {
+            return null;
+        }
 
         if(Server::getInstance()->getPlayerExact($playerName) !== null) {
             return $this->storage[$playerName];
         }
 
-        if(!isset($this->expiration[$playerName])) return null;// should not happen
+        if(!isset($this->expiration[$playerName])) {
+            return null;
+        }// should not happen
 
         if($this->expiration[$playerName] < time()) {
             unset($this->storage[$playerName]);

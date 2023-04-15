@@ -11,7 +11,8 @@ class ExpiringCache implements Cache
 
     public function __construct(
         protected int $ttl
-    ){}
+    ) {
+    }
 
     public function set(string $playerName, array $data): void
     {
@@ -21,8 +22,12 @@ class ExpiringCache implements Cache
 
     public function get(string $playerName): ?array
     {
-        if(!isset($this->storage[$playerName])) return null;
-        if(!isset($this->expiration[$playerName])) return null;// should not happen
+        if(!isset($this->storage[$playerName])) {
+            return null;
+        }
+        if(!isset($this->expiration[$playerName])) {
+            return null;
+        }// should not happen
 
         if($this->expiration[$playerName] < time()) {
             unset($this->storage[$playerName]);

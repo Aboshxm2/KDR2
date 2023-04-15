@@ -13,12 +13,15 @@ class PlayerBasedCache implements Cache
 
     public function __construct(
         private Main $plugin
-    ){}
+    ) {
+    }
 
     public function onJoin(string $playerName): void
     {
         $this->plugin->getDatabase()->getAll($playerName, function (int $kills, int $deaths, int $killstreak) use ($playerName): void {
-            if(Server::getInstance()->getPlayerExact($playerName) === null) return;// to make sure the player is still online
+            if(Server::getInstance()->getPlayerExact($playerName) === null) {
+                return;
+            }// to make sure the player is still online
 
             $this->storage[$playerName] = [$kills, $deaths, $killstreak];
         });
@@ -38,7 +41,9 @@ class PlayerBasedCache implements Cache
 
     public function set(string $playerName, array $data): void
     {
-        if(Server::getInstance()->getPlayerExact($playerName) === null) return;
+        if(Server::getInstance()->getPlayerExact($playerName) === null) {
+            return;
+        }
 
         $this->storage[$playerName] = $data;
     }
