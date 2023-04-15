@@ -26,12 +26,16 @@ class Api
      */
     public static function getAll(string $playerName, \Closure $then): void
     {
-        if (self::$plugin->getConfig()->getNested("cache.enable")) {
-            $data = self::$plugin->getCacheManager()->get($playerName);
+        if (self::$plugin->isCacheEnabled()) {
+            $data = self::$plugin->getCache()->get($playerName);
             if ($data !== null) {
                 $then($data[0], $data[1], $data[2]);
             } else {
-                self::$plugin->getDatabase()->getAll($playerName, $then);
+                self::$plugin->getDatabase()->getAll($playerName, function (int $kills, int $deaths, int $killstreak) use ($playerName, $then): void {
+                    self::$plugin->getCache()->set($playerName, [$kills, $deaths, $killstreak]);
+
+                    $then($kills, $deaths, $killstreak);
+                });
             }
         } else {
             self::$plugin->getDatabase()->getAll($playerName, $then);
@@ -47,8 +51,8 @@ class Api
      */
     public static function setAll(string $playerName, int $kills, int $deaths, int $killstreak): void
     {
-        if (self::$plugin->getConfig()->getNested("cache.enable")) {
-            self::$plugin->getCacheManager()->set($playerName, $kills, $deaths, $killstreak);
+        if (self::$plugin->isCacheEnabled()) {
+            self::$plugin->getCache()->set($playerName, [$kills, $deaths, $killstreak]);
         }
 
         self::$plugin->getDatabase()->setAll($playerName, $kills, $deaths, $killstreak);

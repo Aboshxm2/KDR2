@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aboshxm2\KDR2;
 
+use Aboshxm2\KDR2\cache\PlayerBasedCache;
 use Aboshxm2\KDR2\events\PlayerDeathsUpdateEvent;
 use Aboshxm2\KDR2\events\PlayerKillstreakUpdateEvent;
 use Aboshxm2\KDR2\events\PlayerKillsUpdateEvent;
@@ -12,6 +13,7 @@ use pocketmine\event\entity\EntityRegainHealthEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
+use pocketmine\event\player\PlayerLoginEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\player\Player;
 use pocketmine\Server;
@@ -22,8 +24,7 @@ class EventListener implements Listener
 
     public function __construct(
         private Main $plugin
-    ) {
-    }
+    ) {}
 
     /**
      * @priority MONITOR
@@ -106,11 +107,21 @@ class EventListener implements Listener
         }
     }
 
+    /**
+     * @priority MONITOR
+     */
     public function onQuit(PlayerQuitEvent $event): void
     {
         $player = $event->getPlayer();
         if (isset($this->lastHits[$player->getName()])) {
             unset($this->lastHits[$player->getName()]);
+        }
+
+        if($this->plugin->isCacheEnabled()) {
+            $cache = $this->plugin->getCache();
+            if($cache instanceof PlayerBasedCache) {
+                $cache->onLeave($player->getName());
+            }
         }
     }
 
@@ -122,5 +133,20 @@ class EventListener implements Listener
         $player = $event->getPlayer();
 
         $this->plugin->updateScoreHudTags($player);
+    }
+
+    /**
+     * @priority MONITOR
+     */
+    public function onLogin(PlayerLoginEvent $event): void
+    {
+        if(!$this->plugin->isCacheEnabled()) return;
+
+        $player = $event->getPlayer();
+
+        $cache = $this->plugin->getCache();
+        if($cache instanceof PlayerBasedCache) {
+            $cache->onJoin($player->getName());
+        }
     }
 }

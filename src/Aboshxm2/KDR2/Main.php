@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace Aboshxm2\KDR2;
 
+use Aboshxm2\KDR2\cache\Cache;
 use Aboshxm2\KDR2\cache\CacheManager;
+use Aboshxm2\KDR2\cache\ExpiringCache;
+use Aboshxm2\KDR2\cache\MixedCache;
+use Aboshxm2\KDR2\cache\PlayerBasedCache;
 use Aboshxm2\KDR2\commands\KDRStatsCommand;
 use Aboshxm2\KDR2\database\Database;
 use Aboshxm2\KDR2\database\SqlDatabase;
@@ -14,6 +18,7 @@ use Ifera\ScoreHud\ScoreHud;
 use JackMD\ConfigUpdater\ConfigUpdater;
 use JackMD\UpdateNotifier\UpdateNotifier;
 use pocketmine\player\Player;
+use pocketmine\plugin\DisablePluginException;
 use pocketmine\plugin\PluginBase;
 
 class Main extends PluginBase
@@ -21,7 +26,8 @@ class Main extends PluginBase
     public const CONFIG_VERSION = 1;
 
     private Database $database;
-    private CacheManager $cacheManager;
+    private Cache $cache;
+    private bool $isCacheEnabled;
 
     protected function onEnable(): void
     {
@@ -30,12 +36,43 @@ class Main extends PluginBase
 
         $this->database = new SqlDatabase($this, $this->getConfig()->get("database"));
         if ($this->getConfig()->getNested("cache.enable")) {
-            $this->cacheManager = new CacheManager($this, $this->getConfig()->getNested("cache.technique"), $this->getConfig()->getNested("cache.ttl"));
+            $this->isCacheEnabled = true;
+
+            $this->cache = match (strtolower($this->getConfig()->getNested("cache.technique"))) {
+                Cache::TTL_CACHE_TECHNIQUE => new ExpiringCache($this->getConfig()->getNested("cache.ttl")),
+                Cache::PLAYER_CACHE_TECHNIQUE => new PlayerBasedCache($this),
+                Cache::MIXED_CACHE_TECHNIQUE => new MixedCache($this, $this->getConfig()->getNested("cache.ttl")),
+                default => throw new DisablePluginException("Unknown cache technique {$this->getConfig()->getNested("cache.technique")}"),
+            };
         }
         Api::init($this);
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
         $this->getServer()->getCommandMap()->register("KDR2", new KDRStatsCommand($this));
+    }
+
+    /**
+     * @return Database
+     */
+    public function getDatabase(): Database
+    {
+        return $this->database;
+    }
+
+    /**
+     * @return Cache
+     */
+    public function getCache(): Cache
+    {
+        return $this->cache;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCacheEnabled(): bool
+    {
+        return $this->isCacheEnabled;
     }
 
     /**
@@ -65,21 +102,5 @@ class Main extends PluginBase
                 $ev->call();
             });
         }
-    }
-
-    /**
-     * @return Database
-     */
-    public function getDatabase(): Database
-    {
-        return $this->database;
-    }
-
-    /**
-     * @return CacheManager
-     */
-    public function getCacheManager(): CacheManager
-    {
-        return $this->cacheManager;
     }
 }
