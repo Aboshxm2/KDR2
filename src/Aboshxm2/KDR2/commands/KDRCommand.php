@@ -87,7 +87,7 @@ class KDRCommand extends Command implements PluginOwned
 
                 $sender->sendMessage(str_replace("{player}", $args[1], $this->plugin->getMessage("set-kills.message")));
 
-                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newKills, $args, $sender): void {
+                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newKills, $args): void {
                     Api::setAll($args[1], $newKills, $deaths, $killstreak);
                 });
                 break;
@@ -109,7 +109,7 @@ class KDRCommand extends Command implements PluginOwned
 
                 $sender->sendMessage(str_replace("{player}", $args[1], $this->plugin->getMessage("set-deaths.message")));
 
-                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newDeaths, $args, $sender): void {
+                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newDeaths, $args): void {
                     Api::setAll($args[1], $kills, $newDeaths, $killstreak);
                 });
                 break;
@@ -131,7 +131,7 @@ class KDRCommand extends Command implements PluginOwned
 
                 $sender->sendMessage(str_replace("{player}", $args[1], $this->plugin->getMessage("set-killstreak.message")));
 
-                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newKillstreak, $args, $sender): void {
+                Api::getAll($args[1], function (int $kills, int $deaths, int $killstreak) use ($newKillstreak, $args): void {
                     Api::setAll($args[1], $kills, $deaths, $newKillstreak);
                 });
                 break;
