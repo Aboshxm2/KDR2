@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Aboshxm2\KDR2;
 
 use Aboshxm2\KDR2\cache\Cache;
-use Aboshxm2\KDR2\cache\CacheManager;
 use Aboshxm2\KDR2\cache\ExpiringCache;
 use Aboshxm2\KDR2\cache\MixedCache;
 use Aboshxm2\KDR2\cache\PlayerBasedCache;
 use Aboshxm2\KDR2\commands\KDRCommand;
-use Aboshxm2\KDR2\commands\KDRStatsCommand;
 use Aboshxm2\KDR2\database\Database;
 use Aboshxm2\KDR2\database\SqlDatabase;
 use Ifera\ScoreHud\event\PlayerTagsUpdateEvent;
