@@ -14,5 +14,5 @@ projects:
         version: 3.0.0
       libasynql:
         src: poggit/libasynql/libasynql
-        version: 4.1.0
+        version: 4.1.6
 ...
