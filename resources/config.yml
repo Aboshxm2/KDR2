@@ -1,5 +1,9 @@
 # DO NOT CHANGE THIS
-config-version: 1
+config-version: 2
+
+# Interacting with the database and the cache using lowercase players names.
+# WARNING: If you change this You will lose data for any player who has a capital letter in their name.
+players-names-to-lower-case: true
 
 cache:
   # Enable data caching

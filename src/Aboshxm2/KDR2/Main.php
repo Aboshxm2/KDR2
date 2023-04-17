@@ -24,7 +24,7 @@ use Symfony\Component\Filesystem\Path;
 
 class Main extends PluginBase
 {
-    public const CONFIG_VERSION = 1;
+    public const CONFIG_VERSION = 2;
 
     private Database $database;
     private Cache $cache;
@@ -39,19 +39,21 @@ class Main extends PluginBase
         UpdateNotifier::checkUpdate($this->getName(), $this->getDescription()->getVersion());
         ConfigUpdater::checkUpdate($this, $this->getConfig(), "config-version", self::CONFIG_VERSION);
 
-        $this->database = new SqlDatabase($this, $this->getConfig()->get("database"));
+        $toLowerCase = $this->getConfig()->get("players-names-to-lower-case");
+
+        $this->database = new SqlDatabase($this, $this->getConfig()->get("database"), $toLowerCase);
         if ($this->getConfig()->getNested("cache.enable")) {
             $this->isCacheEnabled = true;
 
             switch (strtolower($this->getConfig()->getNested("cache.technique"))) {
                 case Cache::TTL_CACHE_TECHNIQUE:
-                    $this->cache = new ExpiringCache($this->getConfig()->getNested("cache.ttl"));
+                    $this->cache = new ExpiringCache($this->getConfig()->getNested("cache.ttl"), $toLowerCase);
                     break;
                 case Cache::PLAYER_CACHE_TECHNIQUE:
-                    $this->cache = new PlayerBasedCache($this->getConfig()->getNested("cache.ttl"));
+                    $this->cache = new PlayerBasedCache($this->getConfig()->getNested("cache.ttl"), $toLowerCase);
                     break;
                 case Cache::MIXED_CACHE_TECHNIQUE:
-                    $this->cache = new MixedCache($this, $this->getConfig()->getNested("cache.ttl"));
+                    $this->cache = new MixedCache($this, $this->getConfig()->getNested("cache.ttl"), $toLowerCase);
                     break;
                 default:
                     $this->getLogger()->warning("Unknown cache technique {$this->getConfig()->getNested("cache.technique")}");

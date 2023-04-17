@@ -12,12 +12,17 @@ class PlayerBasedCache implements Cache
     protected array $storage = [];
 
     public function __construct(
-        private Main $plugin
+        private Main $plugin,
+        private bool $toLowerCase
     ) {
     }
 
     public function onJoin(string $playerName): void
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         $this->plugin->getDatabase()->getAll($playerName, function (int $kills, int $deaths, int $killstreak) use ($playerName): void {
             if(Server::getInstance()->getPlayerExact($playerName) === null) {
                 return;
@@ -29,6 +34,10 @@ class PlayerBasedCache implements Cache
 
     public function onLeave(string $playerName)
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         if(isset($this->storage[$playerName])) {
             unset($this->storage[$playerName]);
         }
@@ -36,11 +45,19 @@ class PlayerBasedCache implements Cache
 
     public function get(string $playerName): ?array
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         return $this->storage[$playerName] ?? null;
     }
 
     public function set(string $playerName, array $data): void
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         if(Server::getInstance()->getPlayerExact($playerName) === null) {
             return;
         }

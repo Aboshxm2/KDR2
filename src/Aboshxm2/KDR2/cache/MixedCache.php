@@ -13,14 +13,19 @@ class MixedCache extends PlayerBasedCache implements Cache
 
     public function __construct(
         Main $plugin,
-        protected int $ttl
+        protected int $ttl,
+        private bool $toLowerCase
     ) {
-        parent::__construct($plugin);
+        parent::__construct($plugin, $toLowerCase);
     }
 
 
     public function set(string $playerName, array $data): void
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         $this->storage[$playerName] = $data;
 
         if(Server::getInstance()->getPlayerExact($playerName) === null) {
@@ -31,6 +36,10 @@ class MixedCache extends PlayerBasedCache implements Cache
 
     public function get(string $playerName): ?array
     {
+        if($this->toLowerCase) {
+            $playerName = strtolower($playerName);
+        }
+
         if(!isset($this->storage[$playerName])) {
             return null;
         }
