@@ -50,7 +50,7 @@ class Main extends PluginBase
                     $this->cache = new ExpiringCache($this->getConfig()->getNested("cache.ttl"), $toLowerCase);
                     break;
                 case Cache::PLAYER_CACHE_TECHNIQUE:
-                    $this->cache = new PlayerBasedCache($this->getConfig()->getNested("cache.ttl"), $toLowerCase);
+                    $this->cache = new PlayerBasedCache($this, $toLowerCase);
                     break;
                 case Cache::MIXED_CACHE_TECHNIQUE:
                     $this->cache = new MixedCache($this, $this->getConfig()->getNested("cache.ttl"), $toLowerCase);
