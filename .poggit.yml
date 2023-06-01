@@ -1,18 +1,19 @@
 --- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Aboshxm2/KDR2
 build-by-default: true
 branches:
-- main
+- pm5
 projects:
   KDR2:
     path: ""
     libs:
       ConfigUpdater:
-        src: ifera-mc/ConfigUpdater/ConfigUpdater
+        src: Aboshxm2/ConfigUpdater/ConfigUpdater
         version: 2.0.0
       UpdateNotifier:
-        src: ifera-mc/UpdateNotifier/UpdateNotifier
+        src: Aboshxm2/UpdateNotifier/UpdateNotifier
         version: 3.0.0
       libasynql:
         src: poggit/libasynql/libasynql
-        version: 4.1.6
+        version: ^4.1.1
+        branch: pm5
 ...
