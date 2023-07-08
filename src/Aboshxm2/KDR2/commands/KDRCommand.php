@@ -15,6 +15,7 @@ class KDRCommand extends Command implements PluginOwned
     public function __construct(private Main $plugin)
     {
         parent::__construct("kdr", "KDR Commands");
+        $this->setPermission("KDR2.commands.kdr.stats");
     }
 
     /**
